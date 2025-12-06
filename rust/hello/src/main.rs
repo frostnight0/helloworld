@@ -97,5 +97,49 @@ fn main() {
     let title: &str = &book;
 
     println!("title: {:?}", title);
+
+    println!("-- functions and expressions --------");
+    // Functions and Expressions
+
+    fn hello() {
+        println!("Hello from hello");
+    }
+
+    hello();
+
+    fn double(a: i32) {
+        println!("double of {} is {}", a, 2*a);
+    }
+
+    double(2);
+
+    let circle_area: f32 = {
+        let pi = 3.14;
+        let r = 4.0;
+        pi * r * r
+    };
+
+    println!("circle_area: {}", circle_area);
+
+    // functions do not access out of scope variables, expressions do
+ 
+    // helper for checking types
+    fn type_of<T>(_: &T) -> &'static str {
+        std::any::type_name::<T>()
+    }
+
+    let base: = 10;     // <-- type desided very late, in [fn adjusted_f(base: i16) -> i16] part
+
+    let adjusted_e = {
+        let x = 2;
+        x + base
+    };
+    println!("adjusted_e: {} ({})", adjusted_e, type_of(&adjusted_e));
+
+    fn adjusted_f(base: i16) -> i16 {    // <-- base needs to be passed as an argument
+        let x = 2;
+        x + base
+    }
+    println!("adjusted_f: {} ({})", adjusted_f(base), type_of(&adjusted_f(base)));
 }
 

@@ -128,7 +128,7 @@ fn main() {
         std::any::type_name::<T>()
     }
 
-    let base: = 10;     // <-- type desided very late, in [fn adjusted_f(base: i16) -> i16] part
+    let base = 10;     // <-- type desided very late, in [fn adjusted_f(base: i16) -> i16] part
 
     let adjusted_e = {
         let x = 2;
@@ -141,5 +141,33 @@ fn main() {
         x + base
     }
     println!("adjusted_f: {} ({})", adjusted_f(base), type_of(&adjusted_f(base)));
+    
+    println!("-- references -------------- --------");
+    // References
+    let mut x = 10;   // <-- must be mut, if we want mutations
+    let y = &mut x;   // <-- reference to mut x 
+
+    *y += 2;
+
+    // println!("x {}", x);      // <-- I cannot access x, until y is not longer in a scope.
+    println!("y {}", y);
+    println!("x {}", x);
+
+    // Reassign the reference
+    let a = 20;
+
+    let mut b = &a;   // <-- making b mut
+
+    println!("b: {}", b);
+
+    b = &x;
+
+    println!("b: {}", b);
+
+
+    // Auto-Dereferences
+    // formaters: println!("{}", r)      - yes
+    // method calls: r.len()             - yes
+    // normal expressions: r + 2         - no   (must be *r + 2)
 }
 

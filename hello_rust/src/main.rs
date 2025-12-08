@@ -144,8 +144,8 @@ fn main() {
     
     println!("-- references -------------- --------");
     // References
-    let mut x = 10;   // <-- must be mut, if we want mutations
-    let y = &mut x;   // <-- reference to mut x 
+    let mut x: i32 = 10;   // <-- must be mut, if we want mutations
+    let y: &mut i32 = &mut x;   // <-- reference to mut x 
 
     *y += 2;
 
@@ -164,10 +164,88 @@ fn main() {
 
     println!("b: {}", b);
 
+    // RULE: You may have many immutable references OR one mutable reference.
 
     // Auto-Dereferences
     // formaters: println!("{}", r)      - yes
     // method calls: r.len()             - yes
     // normal expressions: r + 2         - no   (must be *r + 2)
+    
+    // =======================================================================================================
+    // * Iterator Adapters and Closure Argument Types *
+    // =======================================================================================================
+    
+    // map (closure receives: &i32)
+
+    let v = vec![1, -2, 3];
+
+    let result: Vec<i32> =
+        v.iter()                  // yields &i32
+         .map(|x: &i32| *x * 10)  // x is &i32
+         .collect();
+
+    println!("{:?}", result);     // [10, -20, 30]
+
+
+    // any (closure receives: &i32) | logical OR
+
+    let v = vec![1, -2, 3];
+
+    let has_negative =
+        v.iter()
+         .any(|x: &i32| *x < 0);  // x is &i32
+
+    println!("{}", has_negative); // true
+
+
+    // all (closure receives: &i32) | logical AND
+
+    let v = vec![1, -2, 3];
+
+    let all_even =
+        v.iter()
+         .all(|x: &i32| *x % 2 == 0);  // x is &i32
+
+    println!("{}", all_even);         // false
+
+
+    // find (closure receives: &&i32)
+
+    let v = vec![1, -2, 3];
+
+    let found =
+        v.iter()
+         .find(|x: &&i32| **x < 0);   // x is &&i32
+
+    println!("{:?}", found);          // Some(-2)
+
+
+    // filter (closure receives: &&i32)
+
+    let v = vec![1, -2, 3, 4];
+
+    let evens: Vec<i32> =
+        v.iter()
+         .filter(|x: &&i32| **x % 2 == 0)  // careful: filter also gets &&i32
+         .map(|x: &i32| *x)                // convert &i32 → i32
+         .collect();
+
+    println!("{:?}", evens);             // [-2, 4]
+
+
+    // =======================================================================================================
+    // * Iterators *
+    // =======================================================================================================
+
+    // Method           Ownership       Produces    Meaning
+    // .iter()          borrows         &T          Iterate on references
+    // .iter_mut()      borrows         &mut T      Iterate on mutable references
+    // .into_iter()     moves           T           Turn collection into its items
+
+    //  Expression                      Produces                            Type category
+    //  v.iter()                        iterator over references            iterator
+    //  v.iter().map(...)               iterator over transformed values    iterator
+    //  v.iter().filter(...)            iterator over filtered values       iterator
+    //  v.iter().map(...).collect()     concrete collection (Vec, etc.)     collection
 }
 

@@ -247,5 +247,37 @@ fn main() {
     //  v.iter().map(...)               iterator over transformed values    iterator
     //  v.iter().filter(...)            iterator over filtered values       iterator
     //  v.iter().map(...).collect()     concrete collection (Vec, etc.)     collection
+
+    // =======================================================================================================
+    // * Vectors / Matrices *
+    // =======================================================================================================
+    println!("-- vectors / matrices ---------------");
+
+    fn matrix(vec: &mut Vec<Vec<char>>){
+        vec[0][0] = 'd';
+        vec[3][4] = 'd';
+
+        for x in 0..vec.len() {
+            println!("{:?}", vec[x]);
+        }
+    }
+
+    let mut vec = vec![vec!['#'; 10]; 10];
+    matrix(&mut vec);
+
+    // =======================================================================================================
+    // * Reading Files *
+    // =======================================================================================================
+    println!("-- reading files --------------------");
+    
+    let file_path = "foobar.txt";
+
+    let content = std::fs::read_to_string(file_path).unwrap_or_else(|err| {
+        eprintln!("ERROR: could not read file {file_path}: {err}");
+        std::process::exit(1)
+    });
+
+    println!("Size of {file_path}: {size}", size = content.len());
+    println!("{content}");
 }
 

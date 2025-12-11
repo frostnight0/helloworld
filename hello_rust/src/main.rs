@@ -124,7 +124,7 @@ fn main() {
     // functions do not access out of scope variables, expressions do
  
     // helper for checking types
-    fn type_of<T>(_: &T) -> &'static str {
+    fn type_of<T>(_: T) -> &'static str {
         std::any::type_name::<T>()
     }
 
